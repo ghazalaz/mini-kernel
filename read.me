@@ -1,0 +1,39 @@
+
+Run:
+	make all 
+
+
+Testing Notes:
+
+Tasking
+basic_fork:
+	In the report it said the result of fork twice is boot loops. The problem was probably 		
+	related to the memory config on their machine. Although I got the same when forking
+	three times. 
+	I realized the large heap size of the tasks are issuing that error, so I reduced the
+	task's heap size.
+Yield_basic:
+	when forking from a task, I assign the parent priority to the new forked task's priority.
+	so for testing yield, one should first setpriority of the tasks, and check see the actuall
+	value of the priority. 
+	I changed the fork function to set the priority to parent->priority - 1. (Thought it sounds
+	reasonable)
+
+Exit_basic:
+	As discussed in the class, its design dependent whether to implement keeping the init task
+	inside exit() function or check it before function call.
+
+Pipe:
+	The report said there is no turn around when the buffer is full, which is true because it's not 
+	what is required int the instructions of the write pipe!
+
+Semaphore:
+	The report mentions that 5 process are locking a varibale, odd process does addition by 1 to it
+	and even processes do substraction by 1. 
+	But what exactly is in the user_app is the following code:
+		data += (1 << getpid());
+		data -= (1 << getpid());
+	I dont quiet understand why they used this line of code, but replacing it with simple:
+		data ++;
+		data --;
+	would give the correct result. ( data increased by one at the end)
